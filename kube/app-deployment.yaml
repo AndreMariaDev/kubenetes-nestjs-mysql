@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: node-app-deployment
+  labels:
+    app: node-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: node-app
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: node-app
+    spec:
+      containers:
+        - name: node-app
+          image: andremaria1980/kubenetes-nestjs-mysql:kubenetes-nestjs-mysql_app
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              value: mysqldbkube
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_USER
+                  name: env 
+            - name: DB_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_ROOT_PASSWORD
+                  name: env
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_DATABASE
+                  name: env
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_DOCKER_PORT
+                  name: env
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_USER
+                  name: env
+            - name: NODE_DOCKER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_DOCKER_PORT
+                  name: env
+            - name: NODE_LOCAL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: NODE_LOCAL_PORT
+                  name: env
+          resources: {}
+          stdin: true
+          tty: true
+          volumeMounts:
+            - mountPath: /src
+              name: app-claim0
+      restartPolicy: Always
+      volumes:
+        - name: app-claim0
+          persistentVolumeClaim:
+            claimName: app-claim0
+status: {}

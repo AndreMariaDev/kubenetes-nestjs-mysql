@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mysqldbkube
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysqldbkube
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysqldbkube
+    spec:
+      containers:
+        - name: mysqldbkube
+          image: mysql:5.7
+          ports:
+            - containerPort: 3306
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_ROOT_PASSWORD
+                  name: env
+            - name: MYSQL_DATABASE
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_DATABASE
+                  name: env
+            - name: MYSQLDB_LOCAL_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_LOCAL_PORT
+                  name: env
+            - name: MYSQLDB_DOCKER_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: MYSQLDB_DOCKER_PORT
+                  name: env
+          resources: {}
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: db
+            - mountPath: /usr/static/images
+              name: static-files
+      restartPolicy: Always
+      volumes:
+        - name: db
+          persistentVolumeClaim:
+            claimName: db
+        - name: static-files
+          persistentVolumeClaim:
+            claimName: static-files
+status: {}
