@@ -14,7 +14,6 @@ minikube start
 	kubectl delete -f <NAME_FILE>.yaml 
 
 # Deploy app mysql
-
 kubectl apply -f kube/env-configmap.yaml
 kubectl apply -f kube/static-files-persistentvolumeclaim.yaml
 kubectl apply -f kube/mysqldbkube-deployment.yaml
@@ -23,7 +22,6 @@ kubectl apply -f kube/db-persistentvolumeclaim.yaml
 kubectl apply -f db-persistentvolumeclaim.yaml
 
 # Deploy app nestjs
-
 kubectl apply -f kube/app-claim0-persistentvolumeclaim.yaml
 kubectl apply -f kube/app-deployment.yaml
 kubectl apply -f kube/app-service.yaml
