@@ -1,5 +1,6 @@
 import { Injectable ,Inject} from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
+import { RedisCacheService } from '../cache/redis.cache.service';
 
 import { User } from '../models/user.model';
 import { UserType } from './user.dto';
@@ -11,18 +12,40 @@ export class UsersService {
   constructor(
     @Inject('USERS_REPOSITORY')
     private readonly userRepository: typeof User,
+    public readonly redisCacheService: RedisCacheService
   ) {}
 
   async findAll(): Promise<UserType[]> {
-    return this.userRepository.findAll();
+    const cache = await this.redisCacheService.get(`FIND_ALL_USERS`);
+    if(!cache){
+      let result = this.userRepository.findAll().then((result)=>{
+        this.redisCacheService.set(
+          `FIND_ALL_USERS`,
+          JSON.stringify(result),
+          { ttl: 300 })
+        return result;
+      });;
+    }
+
+    return JSON.parse(cache);
   }
 
   async findOne(id: string): Promise<User> {
-    return this.userRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    const cache = await this.redisCacheService.get(`FIND_ON_USER:${id}`);
+    if(!cache){
+      return this.userRepository.findOne({
+        where: {
+          id,
+        },
+      }).then((result)=>{
+        this.redisCacheService.set(
+          `FIND_ALL_USERS`,
+          JSON.stringify(result),
+          { ttl: 300 })
+        return result;
+      });
+    }
+    return new Promise<User>(JSON.parse(cache));
   }
 
   async findOneData(id: string): Promise<User> {

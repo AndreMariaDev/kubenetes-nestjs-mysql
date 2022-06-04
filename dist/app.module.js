@@ -15,12 +15,14 @@ const users_module_1 = require("./users/users.module");
 const photos_module_1 = require("./photos/photos.module");
 const auth_module_1 = require("./auth/auth.module");
 const login_module_1 = require("./login/login.module");
+const database_module_1 = require("./database/database.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             config_1.ConfigModule.forRoot(),
+            database_module_1.DatabaseModule,
             users_module_1.UsersModule,
             photos_module_1.PhotosModule,
             auth_module_1.AuthModule,

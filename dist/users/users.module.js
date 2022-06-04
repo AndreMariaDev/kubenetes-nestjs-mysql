@@ -12,12 +12,14 @@ const database_module_1 = require("../database/database.module");
 const users_service_1 = require("./users.service");
 const user_providers_1 = require("./user.providers");
 const users_resolver_1 = require("./users.resolver");
+const redis_cache_module_1 = require("../cache/redis.cache.module");
 let UsersModule = class UsersModule {
 };
 UsersModule = __decorate([
     (0, common_1.Module)({
         imports: [
             database_module_1.DatabaseModule,
+            redis_cache_module_1.RedisCacheModule
         ],
         providers: [users_resolver_1.UserResolver, users_service_1.UsersService, ...user_providers_1.usersProviders],
         exports: [users_service_1.UsersService]

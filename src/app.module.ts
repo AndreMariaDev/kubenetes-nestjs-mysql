@@ -10,10 +10,12 @@ import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { LoginUsersModule } from './login/login.module';
 import { GraphQLError, GraphQLFormattedError } from 'graphql';
+import { DatabaseModule } from './database/database.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
+    DatabaseModule,
     UsersModule,
     PhotosModule,
     AuthModule,

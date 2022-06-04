@@ -16,6 +16,7 @@ services:
   app:
     depends_on:
       - mysqldbkube
+      - cache
     build: .
     restart: unless-stopped
     env_file: ./.env
@@ -27,12 +28,29 @@ services:
       DB_PASSWORD: $MYSQLDB_ROOT_PASSWORD
       DB_NAME: $MYSQLDB_DATABASE
       DB_PORT: $MYSQLDB_DOCKER_PORT
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
     stdin_open: true
     tty: true
+    links:
+      - cache
     volumes:
       - ./:/src
- 
+  cache:
+    image: "redis:alpine"
+    restart: always
+    expose:
+      - "6379"
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81
+    volumes: 
+      - cache:/data
+
 volumes: 
   db:
   static-files: {}
+  cache:
+    driver: local
 

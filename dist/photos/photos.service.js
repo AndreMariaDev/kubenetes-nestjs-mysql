@@ -14,22 +14,43 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PhotosService = void 0;
 const common_1 = require("@nestjs/common");
+const redis_cache_service_1 = require("../cache/redis.cache.service");
 const photo_model_1 = require("../models/photo.model");
 const users_service_1 = require("../users/users.service");
 let PhotosService = class PhotosService {
-    constructor(photoRepository, usersService) {
+    constructor(photoRepository, usersService, redisCacheService) {
         this.photoRepository = photoRepository;
         this.usersService = usersService;
+        this.redisCacheService = redisCacheService;
     }
-    async findAll() {
-        return this.photoRepository.findAll();
+    async findAll(userId) {
+        const cache = await this.redisCacheService.get(`FIND_ALL_PHOTO:${userId}`);
+        if (!cache) {
+            let result = this.photoRepository.findAll({
+                where: {
+                    userId,
+                },
+            }).then((result) => {
+                this.redisCacheService.set(`FIND_ALL_PHOTO:${userId}`, JSON.stringify(result), { ttl: 300 });
+                return result;
+            });
+            ;
+        }
+        return new Promise(JSON.parse(cache));
     }
-    findOne(id) {
-        return this.photoRepository.findOne({
-            where: {
-                id,
-            },
-        });
+    async findOne(id) {
+        const cache = await this.redisCacheService.get(`FIND_ON_PHOTO:${id}`);
+        if (!cache) {
+            return this.photoRepository.findOne({
+                where: {
+                    id,
+                },
+            }).then((result) => {
+                this.redisCacheService.set(`FIND_ON_PHOTO:${id}`, JSON.stringify(result), { ttl: 300 });
+                return result;
+            });
+        }
+        return new Promise(JSON.parse(cache));
     }
     async remove(id) {
         const user = await this.findOne(id);
@@ -74,7 +95,8 @@ let PhotosService = class PhotosService {
 PhotosService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)('PHOTOS_REPOSITORY')),
-    __metadata("design:paramtypes", [Object, users_service_1.UsersService])
+    __metadata("design:paramtypes", [Object, users_service_1.UsersService,
+        redis_cache_service_1.RedisCacheService])
 ], PhotosService);
 exports.PhotosService = PhotosService;
 //# sourceMappingURL=photos.service.js.map

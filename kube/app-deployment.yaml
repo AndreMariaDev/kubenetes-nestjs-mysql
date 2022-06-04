@@ -1,12 +1,12 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: Deployment #A Deployment provides declarative updates for Pods and ReplicaSets.
 metadata:
   name: node-app-deployment
   labels:
     app: node-app
 spec:
   replicas: 1
-  selector:
+  selector: # spec.selector field defines how the Deployment finds which Pods to manage. 
     matchLabels:
       app: node-app
   strategy:
@@ -15,10 +15,10 @@ spec:
     metadata:
       labels:
         app: node-app
-    spec:
-      containers:
+    spec: # .template.spec field, indicates that the Pods run one container
+      containers: 
         - name: node-app
-          image: andremaria1980/kubenetes-nestjs-mysql:kubenetes-nestjs-mysql_app
+          image: andremaria1980/v1:v1
           ports:
             - containerPort: 3000
           env:
@@ -58,6 +58,36 @@ spec:
               valueFrom:
                 configMapKeyRef:
                   key: NODE_LOCAL_PORT
+                  name: env
+            - name: REDIS_HOST
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_HOST
+                  name: env
+            - name: REDIS_PORT
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PORT
+                  name: env
+            - name: REDIS_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PASSWORD
+                  name: env
+            - name: REDIS_USE_TLS
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_USE_TLS
+                  name: env
+            - name: CACHE_SHORT_PERIOD
+              valueFrom:
+                configMapKeyRef:
+                  key: CACHE_SHORT_PERIOD
+                  name: env
+            - name: CACHE_LONG_PERIOD
+              valueFrom:
+                configMapKeyRef:
+                  key: CACHE_LONG_PERIOD
                   name: env
           resources: {}
           stdin: true

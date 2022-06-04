@@ -1,9 +1,11 @@
+import { RedisCacheService } from '../cache/redis.cache.service';
 import { User } from '../models/user.model';
 import { UserType } from './user.dto';
 import { CreateUserInput, UpdateUserInput } from './user.input';
 export declare class UsersService {
     private readonly userRepository;
-    constructor(userRepository: typeof User);
+    readonly redisCacheService: RedisCacheService;
+    constructor(userRepository: typeof User, redisCacheService: RedisCacheService);
     findAll(): Promise<UserType[]>;
     findOne(id: string): Promise<User>;
     findOneData(id: string): Promise<User>;

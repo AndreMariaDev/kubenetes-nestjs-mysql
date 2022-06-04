@@ -14,20 +14,37 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UsersService = void 0;
 const common_1 = require("@nestjs/common");
+const redis_cache_service_1 = require("../cache/redis.cache.service");
 const user_model_1 = require("../models/user.model");
 let UsersService = class UsersService {
-    constructor(userRepository) {
+    constructor(userRepository, redisCacheService) {
         this.userRepository = userRepository;
+        this.redisCacheService = redisCacheService;
     }
     async findAll() {
-        return this.userRepository.findAll();
+        const cache = await this.redisCacheService.get(`FIND_ALL_USERS`);
+        if (!cache) {
+            let result = this.userRepository.findAll().then((result) => {
+                this.redisCacheService.set(`FIND_ALL_USERS`, JSON.stringify(result), { ttl: 300 });
+                return result;
+            });
+            ;
+        }
+        return JSON.parse(cache);
     }
     async findOne(id) {
-        return this.userRepository.findOne({
-            where: {
-                id,
-            },
-        });
+        const cache = await this.redisCacheService.get(`FIND_ON_USER:${id}`);
+        if (!cache) {
+            return this.userRepository.findOne({
+                where: {
+                    id,
+                },
+            }).then((result) => {
+                this.redisCacheService.set(`FIND_ALL_USERS`, JSON.stringify(result), { ttl: 300 });
+                return result;
+            });
+        }
+        return new Promise(JSON.parse(cache));
     }
     async findOneData(id) {
         return this.userRepository.findOne({
@@ -74,7 +91,7 @@ let UsersService = class UsersService {
 UsersService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)('USERS_REPOSITORY')),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [Object, redis_cache_service_1.RedisCacheService])
 ], UsersService);
 exports.UsersService = UsersService;
 //# sourceMappingURL=users.service.js.map

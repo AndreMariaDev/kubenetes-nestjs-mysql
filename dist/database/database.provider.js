@@ -10,6 +10,7 @@ exports.databaseProviders = [
     {
         provide: 'SEQUELIZE',
         useFactory: async () => {
+            console.log(`dbConfig.HOST:${db_config_1.dbConfig.HOST}`);
             console.log(`dbConfig.DB:${db_config_1.dbConfig.DB}`);
             console.log(`dbConfig.USER: ${db_config_1.dbConfig.USER}`);
             console.log(`dbConfig.PASSWORD: ${db_config_1.dbConfig.PASSWORD}`);

@@ -21,8 +21,8 @@ let PhotosResolver = class PhotosResolver {
     constructor(photosService) {
         this.photosService = photosService;
     }
-    async findAll() {
-        return this.photosService.findAll();
+    async findAll(idUser) {
+        return this.photosService.findAll(idUser);
     }
     async findOne(id) {
         return this.photosService.findOne(id);
@@ -49,8 +49,9 @@ let PhotosResolver = class PhotosResolver {
 };
 __decorate([
     (0, graphql_1.Query)(() => [photo_dto_1.PhotoType], { name: 'findAllPhotos' }),
+    __param(0, (0, graphql_1.Args)('idUser', { type: () => graphql_1.Int })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], PhotosResolver.prototype, "findAll", null);
 __decorate([

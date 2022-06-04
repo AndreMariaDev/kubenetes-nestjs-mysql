@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  cache:
+    image: "redis:alpine"
+    restart: always
+    env_file: ./.env
+    expose:
+      - ${REDIS_PORT}
+    ports:
+      - 6379:6379 #$REDIS_PORT:$REDIS_PORT
+    command: redis-server --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes: 
+      - cache:/data
+
+volumes: 
+  cache:
+    driver: local
+

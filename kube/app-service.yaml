@@ -1,10 +1,10 @@
 apiVersion: v1
-kind: Service
+kind: Service #An abstract way to expose an application running on a set of Pods as a network service.
 metadata:
   name: node-app-service
 spec:
   selector:
-    app: node-app
+    app: node-app # which targets TCP port 3000 on any Pod with the app=node-app label.
   type: LoadBalancer
   ports:
   - protocol: TCP

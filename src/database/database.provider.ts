@@ -10,6 +10,7 @@ export const databaseProviders = [
   {
     provide: 'SEQUELIZE',
     useFactory: async () => {
+      console.log(`dbConfig.HOST:${dbConfig.HOST}`);
       console.log(`dbConfig.DB:${dbConfig.DB}`);
       console.log(`dbConfig.USER: ${dbConfig.USER}`);
       console.log(`dbConfig.PASSWORD: ${dbConfig.PASSWORD}`);
@@ -30,7 +31,7 @@ export const databaseProviders = [
           }
         }
       );
-
+      
       sequelize.addModels([User]);
       sequelize.addModels([Photo]);
       sequelize.addModels([LoginUser]);

@@ -13,11 +13,12 @@ const photos_resolver_1 = require("./photos.resolver");
 const photos_service_1 = require("./photos.service");
 const photos_providers_1 = require("./photos.providers");
 const users_module_1 = require("../users/users.module");
+const redis_cache_module_1 = require("../cache/redis.cache.module");
 let PhotosModule = class PhotosModule {
 };
 PhotosModule = __decorate([
     (0, common_1.Module)({
-        imports: [database_module_1.DatabaseModule, users_module_1.UsersModule],
+        imports: [database_module_1.DatabaseModule, users_module_1.UsersModule, redis_cache_module_1.RedisCacheModule],
         providers: [photos_resolver_1.PhotosResolver, photos_service_1.PhotosService, ...photos_providers_1.photosProviders]
     })
 ], PhotosModule);

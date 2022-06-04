@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: cache
+  name: cache
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cache
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: cache
+    spec:
+      containers:
+        - name: cache
+          image: redis:alpine
+          ports:
+            - containerPort: 6379
+          env:
+            - name: REDIS_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  key: REDIS_PASSWORD
+                  name: env
+          args:
+            - redis-server
+            - --save
+            - "20"
+            - "1"
+            - --loglevel
+            - warning
+            - --requirepass
+            - $(REDIS_PASSWORD)
+          resources: {}
+          volumeMounts:
+            - mountPath: /data
+              name: cache
+      restartPolicy: Always
+      volumes:
+        - name: cache
+          persistentVolumeClaim:
+            claimName: cache
+status: {}

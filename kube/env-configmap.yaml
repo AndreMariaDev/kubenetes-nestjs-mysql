@@ -12,6 +12,12 @@ data:
   DB_PASSWORD: "123456"
   DB_NAME: "kubernetes_node_db"
   DB_PORT: "3306"
+  REDIS_HOST: "cache"
+  REDIS_PASSWORD: "eYVX7EwVmmxKPCDmwMtyKVge8oLd2t81"
+  REDIS_PORT: "6379"
+  REDIS_USE_TLS: "no"
+  CACHE_SHORT_PERIOD: "300"
+  CACHE_LONG_PERIOD: "43200"
 kind: ConfigMap
 metadata:
   name: env

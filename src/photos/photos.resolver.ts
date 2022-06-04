@@ -15,8 +15,8 @@ export class PhotosResolver {
     }
 
     @Query(() => [PhotoType],{ name: 'findAllPhotos' })
-    async findAll() {
-        return this.photosService.findAll();
+    async findAll(@Args('idUser', { type: () => Int }) idUser: number) {
+        return this.photosService.findAll(idUser);
     }
 
     @Query(() => PhotoType,{ name: 'findOnePhoto' })

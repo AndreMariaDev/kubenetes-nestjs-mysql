@@ -1,5 +1,6 @@
 import { Injectable,Inject } from '@nestjs/common';
 import { Sequelize } from 'sequelize-typescript';
+import { RedisCacheService } from '../cache/redis.cache.service';
 import { Photo } from '../models/photo.model';
 import { User } from '../models/user.model';
 import { UsersService } from '../users/users.service';
@@ -11,18 +12,45 @@ export class PhotosService {
     @Inject('PHOTOS_REPOSITORY')
     private photoRepository: typeof Photo,
     private readonly usersService: UsersService,
+    public readonly redisCacheService: RedisCacheService
   ) {}
 
-  async findAll(): Promise<Photo[]> {
-    return this.photoRepository.findAll();
+  async findAll(userId: number): Promise<Photo[]> {
+    const cache = await this.redisCacheService.get(`FIND_ALL_PHOTO:${userId}`);
+    if(!cache){
+      let result = this.photoRepository.findAll({
+        where: {
+          userId,
+        },
+      }
+      ).then((result)=>{
+        this.redisCacheService.set(
+          `FIND_ALL_PHOTO:${userId}`,
+          JSON.stringify(result),
+          { ttl: 300 })
+        return result;
+      });;
+    }
+
+    return new Promise<Photo[]>(JSON.parse(cache));
   }
 
-  findOne(id: string): Promise<Photo> {
-    return this.photoRepository.findOne({
-      where: {
-        id,
-      },
-    });
+  async findOne(id: string): Promise<Photo> {
+    const cache = await this.redisCacheService.get(`FIND_ON_PHOTO:${id}`);
+    if(!cache){
+      return this.photoRepository.findOne({
+        where: {
+          id,
+        },
+      }).then((result)=>{
+        this.redisCacheService.set(
+          `FIND_ON_PHOTO:${id}`,
+          JSON.stringify(result),
+          { ttl: 300 })
+        return result;
+      });
+    }
+    return new Promise<Photo>(JSON.parse(cache));
   }
 
   async remove(id: string): Promise<void> {

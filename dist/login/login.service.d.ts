@@ -15,6 +15,7 @@ export declare class LoginUsersService {
     validateUser(input: ValidationLoginUserInput): Promise<LoginUser>;
     whoAmI(userName: string): Promise<User>;
     validateUserLogin(input: ValidationLoginUserInput): Promise<LoginUser>;
+    validateAdminLogin(input: ValidationLoginUserInput): LoginUser;
     findAll(): Promise<LoginUser[]>;
     findOne(id: string): Promise<LoginUser>;
     remove(id: string): Promise<void>;
