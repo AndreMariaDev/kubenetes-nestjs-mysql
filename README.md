@@ -47,7 +47,7 @@
 
 
 ![](images/shemaKubernetesNodejsMySQL.png)
-![](images/shema.png)
+![](images/schema.png)
 
 
 # Deploy app Redis
