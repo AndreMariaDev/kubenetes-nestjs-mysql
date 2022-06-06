@@ -14,7 +14,7 @@ pipeline {
         git 
           url 'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git',
           branch: 'main', 
-          credentialsId: '859cc0da-2843-43c4-80c3-f291114ab039',
+          credentialsId: '859cc0da-2843-43c4-80c3-f291114ab039'
       }
     }
 
