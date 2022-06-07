@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    dockerimagename = "andremaria1980/v1"
+    dockerimagename = "andremaria1980/jenkins"
     dockerImage = ""
   }
 
@@ -11,7 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git', branch: 'main', credentialsId: '859cc0da-2843-43c4-80c3-f291114ab039'
+        git url:'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git', branch: 'main', credentialsId: '73a6300e-fe00-4272-8e6f-b6d3ac373eb0'
       }
     }
 
