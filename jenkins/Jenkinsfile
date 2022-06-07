@@ -39,7 +39,7 @@ pipeline {
     stage('Deploying App to Kubernetes') {
       steps {
         script {
-          kubernetesDeploy(configs: "kube/env-configmap.yaml", kubeconfigId: "kubernetes")
+          // kubernetesDeploy(configs: "kube/env-configmap.yaml", kubeconfigId: "kubernetes")
           kubernetesDeploy(configs: "kube/static-files-persistentvolumeclaim.yaml", kubeconfigId: "kubernetes")
           kubernetesDeploy(configs: "kube/mysqldbkube-deployment.yaml", kubeconfigId: "kubernetes")
           kubernetesDeploy(configs: "kube/mysqldbkube-service.yaml", kubeconfigId: "kubernetes")
