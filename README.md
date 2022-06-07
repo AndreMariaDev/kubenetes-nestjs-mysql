@@ -58,3 +58,11 @@ kubectl apply -f kube/cache/cache-service.yaml
 
 ### fix Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post
 sudo chmod 666 /var/run/docker.sock
+
+## credentials kubernetes in jenkins
+cd ~/.kube/config
+alter filds certificate-authority-.. path to base64
+example: certificate-authority : /home/...
+certificate-authority-data: LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS.....
+use to command to convert
+cat client.key | base64 -w 0; echo
