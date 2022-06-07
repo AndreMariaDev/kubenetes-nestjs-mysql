@@ -55,3 +55,6 @@ kubectl apply -f kube/env-configmap.yaml
 kubectl apply -f kube/cache/cache-persistentvolumeclaim.yaml
 kubectl apply -f kube/cache/cache-deployment.yaml
 kubectl apply -f kube/cache/cache-service.yaml
+
+### fix Got permission denied while trying to connect to the Docker daemon socket at unix:///var/run/docker.sock: Post
+sudo chmod 666 /var/run/docker.sock
