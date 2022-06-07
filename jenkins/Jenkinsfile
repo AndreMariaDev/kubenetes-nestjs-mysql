@@ -9,16 +9,6 @@ pipeline {
 
   stages {
 
-    stage("Fix the permission issue") {
-
-        agent any
-
-        steps {
-            sh "chown root:jenkins /run/docker.sock"
-        }
-
-    }
-
     stage('Checkout Source') {
       steps {
         git url:'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git', branch: 'main', credentialsId: '73a6300e-fe00-4272-8e6f-b6d3ac373eb0'
