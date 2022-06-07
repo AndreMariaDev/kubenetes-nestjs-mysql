@@ -18,7 +18,7 @@ spec:
     spec: # .template.spec field, indicates that the Pods run one container
       containers: 
         - name: node-app
-          image: andremaria1980/v1:v1
+          image: andremaria1980/jenkins:latest
           ports:
             - containerPort: 3000
           env:
