@@ -1,7 +1,7 @@
 pipeline {
 
   environment {
-    dockerimagename = "andremaria1980/jenkins"
+    dockerimagename = "andremaria1980/kubenetes-nestjs-mysql_app"
     dockerImage = ""
   }
 
@@ -11,7 +11,7 @@ pipeline {
 
     stage('Checkout Source') {
       steps {
-        git url:'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git', branch: 'main', credentialsId: '73a6300e-fe00-4272-8e6f-b6d3ac373eb0'
+        git url:'https://github.com/AndreMariaDev/kubenetes-nestjs-mysql.git', branch: 'main', credentialsId: '049fea70-6b01-4590-ba61-5cec1bd9e8d1'
       }
     }
 
@@ -30,7 +30,7 @@ pipeline {
       steps{
         script {
           docker.withRegistry( 'https://registry.hub.docker.com', registryCredential ) {
-            dockerImage.push("v1")
+            dockerImage.push("jenkins")
           }
         }
       }

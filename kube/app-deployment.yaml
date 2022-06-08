@@ -18,7 +18,7 @@ spec:
     spec: # .template.spec field, indicates that the Pods run one container
       containers: 
         - name: node-app
-          image: andremaria1980/jenkins:v1
+          image: andremaria1980/kubenetes-nestjs-mysql_app:jenkins
           ports:
             - containerPort: 3000
           env:
